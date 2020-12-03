@@ -7,7 +7,8 @@ The exercises below are designed to be followed in order.
 Please note these exercises are using Monix 3.1.0.  Please refer to the docs at
 https://monix.io/docs/3x/eval/task.html
 
-## Adventure 1: Aysnchrony with Monix Task
+## Adventure 1: Asynchrony with Monix Task
+
 The aim is:
 
 1. Gain practice/confidence in working with Monix Task.
@@ -18,12 +19,13 @@ There are a series of tests that you need to make pass in TaskAdventuresSpec.
 Run them with `sbt "testOnly *.TaskAdventuresSpec"`.  Tests can also be run in the IDE.
 
 
-## Adventure 2: Aysnchrony with Monix Observable
+## Adventure 2: Asynchrony with Monix Observable
+
 The aim is:
 
 1. Gain practice/confidence in working with Monix Observable.
 
-Where Task is for a single asynchronous action, an Observable represents an stream of
+Where Task is for a single asynchronous action, an Observable represents a stream of
 asynchronous actions.
 
 Complete the exercises in: adventures.task.ObservableAdventures
@@ -34,3 +36,5 @@ browsing https://monix.io/api/3.0/monix/reactive/Observable.html.
 
 There are a series of tests that you need to make pass in ObservableAdventuresSpec.
 Run them with `sbt "testOnly *.ObservableAdventuresSpec"`.  Tests can also be run in the IDE.
+
+Note: Some of these tests can take a bit long to run. That is ok, and is totally intentional.

@@ -10,10 +10,17 @@ import scala.concurrent.duration.FiniteDuration
   */
 object TaskAdventures {
 
+  /*
+    Task is a data type to model and control effectful computations in a purely functional way.
+    It is a powerful abstraction to run tasks in a non-blocking/async way.
+    See task documentation for the 3.x series here https://monix.io/docs/3x/eval/task.html
+    And the current https://monix.io/docs/current/eval/task.html
+   */
+
   /**
     * 1.  Create a task which returns 43
     *
-    * See https://monix.io/docs/2x/eval/task.html#simple-builders for ways to construct Tasks
+    * See https://monix.io/docs/3x/eval/task.html#simple-builders for ways to construct Tasks
     */
   def immediatelyExecutingTask(): Task[Int] = {
     ???
@@ -29,7 +36,7 @@ object TaskAdventures {
   /**
     * 3.	Create a Task which always fails.
     *
-    * See https://monix.io/docs/2x/eval/task.html#taskraiseerror
+    * See https://monix.io/docs/3x/eval/task.html#taskraiseerror
     */
   def alwaysFailingTask(): Task[Unit] = {
     ???
@@ -76,7 +83,7 @@ object TaskAdventures {
     * implicit def parTaskApplicative: Applicative[eval.Task.Par] = Task.catsParallel.applicative
     *
     * Note that you will also need to convert from Task to Task.Par for the cats sequence operator to execute the tasks
-    * in parallel.
+    * in parallel. Look at the functions in eval.Task.Par
     */
   def calculateStringComplexityInParallelAgain(strings: List[String], complexity: String => Task[Int]): Task[Int] = {
     ???

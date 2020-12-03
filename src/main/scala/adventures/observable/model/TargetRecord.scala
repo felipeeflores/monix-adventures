@@ -1,3 +1,3 @@
 package adventures.observable.model
 
-case class TargetRecord(id: String, price: Double)
+final case class TargetRecord(id: String, price: Double)

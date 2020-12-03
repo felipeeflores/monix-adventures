@@ -14,6 +14,8 @@ import scala.concurrent.Future
   * don't cover the majority of functions on Observable.  For those you are best exploring Observable in your IDE or
   * browsing https://monix.io/api/3.0/monix/reactive/Observable.html.
   *
+  * Latest documentation can be found in https://monix.io/docs/current/
+  *
   * These exercises will introduce you to a common problem ETL pipeline.  The steps to complete this are.
   * 1. Read from a external paginated datasource (no need to worry about duplicate data, assume data will only come through
   * once).
@@ -39,7 +41,9 @@ object ObservableAdventures {
   def iterablesAndConcurrency(records: Iterable[Int], load: Int => Future[SourceRecord]): Iterable[TargetRecord] = ???
 
   /**
-    * Create an Observable which emits each element of the source list
+    * Create an Observable which emits each element of the source list.
+    *
+    * Look at the helper functions in Observable: fromXYZ.
     */
   def listToObservable(records: List[SourceRecord]): Observable[SourceRecord] = ???
 
@@ -47,17 +51,22 @@ object ObservableAdventures {
     * Transform all of the SourceRecords to TargetRecords.  If the price cannot be converted to a double,
     * then drop the Source element.
     *
+    * Remember, parsing/transforming a String to a double is an unsafe operation that needs to be dealt with.
+    *
     * @param sourceRecords
     * @return
     */
   def transform(sourceRecords: Observable[SourceRecord]): Observable[TargetRecord] = ???
 
   /**
-    * Elastic search supports saving batches of 5 records. This is a remote async call so the result is represented
+    * Your elasticsearch supports saving batches of 5 records. This is a remote async call so the result is represented
     * by `Task`.
     *
     * Implement the following method so it calls elasticSearchLoad with batches of 5 records and returns the number
-    * of loaded items.
+    * of loaded items, i.e. size of each batch loaded.
+    *
+    * Have a look at what Observable provides out of the box for this. Hint: buffering and evaluating tasks are the
+    * concepts here.
     */
   def load(targetRecords: Observable[TargetRecord], elasticSearchLoad: Seq[TargetRecord] => Task[Unit]): Observable[Int] = ???
 
@@ -73,9 +82,16 @@ object ObservableAdventures {
   }
 
   /**
-    * Consume the Observable
+    * Consume the Observable.
+    *
+    * Monix
+    * > models producer-consumer relationships, where you can have a single producer pushing data into one or multiple consumers
+    *
+    * We need a consumer to materialize and exhaust the stream.
     *
     * The final result should be the number of records which were saved to ElasticSearch.
+    *
+    * Hint: have a look at what's available in the monix.reactive.Consumer object.
     */
   def execute(loadedObservable: Observable[Int]): Task[Int] = ???
 
@@ -87,7 +103,7 @@ object ObservableAdventures {
     * reference to the next page. You are required the read the records from ALL the pages and return them in a
     * single Observable.
     *
-    * The first page of data can be obtained using PageId.FirstPage`, after which you should follow the nextPage
+    * The first page of data can be obtained using `PageId.FirstPage`, after which you should follow the nextPage
     * references in the PaginatedResult.
     *
     * Look at
@@ -104,11 +120,11 @@ object ObservableAdventures {
     *
     * Hint: Read up on asynchronous boundaries in https://monix.io/api/3.0/monix/reactive/Observable.html
     */
-  def readTransformAndLoadAndExecute(readPage: PageId => Task[PaginatedResult], elasticSearchLoad: Seq[TargetRecord] => Task[Unit]): Task[Int] = {
+  def readTransformAndLoadAndExecute(readPage: PageId => Task[PaginatedResult],
+                                     elasticSearchLoad: Seq[TargetRecord] => Task[Unit]): Task[Int] = {
     // Note it wouldn't look like this in the prod code, but more a factor of combining our building blocks above.
     val readObservable = readFromPaginatedDatasource(readPage)
     val transformedObservable = transform(readObservable)
     execute(load(transformedObservable, elasticSearchLoad))
   }
-
 }
